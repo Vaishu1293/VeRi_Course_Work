@@ -7,6 +7,8 @@ import torchvision.models as tvmodels
 __all__ = ["mobilenet_v3_small", "vgg16", "alexnet", "densenet121", "densenet169", "densenet201"]
 
 
+import torch.nn.functional as F
+
 class TorchVisionModel(nn.Module):
     def __init__(self, name, num_classes, loss, pretrained, **kwargs):
         super().__init__()
@@ -15,13 +17,28 @@ class TorchVisionModel(nn.Module):
         self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
 
         if name == "alexnet":
-            self.feature_dim = self.backbone.classifier[-1].in_features
+            # Load the pretrained AlexNet model
+            alexnet = models.alexnet(pretrained=pretrained)
+
+            # Access the last layer (classifier) of the model using nn.Sequential
+            classifier = nn.Sequential(*list(alexnet.classifier.children()))
+
+            # Modify the last layer to have the desired number of output features
+            in_features = classifier[-1].in_features
+            classifier[-1] = nn.Linear(in_features, num_classes)
+
+            # Set the modified classifier back to the model
+            self.backbone.classifier = classifier
+
+            # Set the feature dimension to the modified classifier's input features
+            self.feature_dim = in_features
         else:
             self.feature_dim = self.backbone.classifier[0].in_features
 
-        # overwrite the classifier used for ImageNet pretrianing
-        # nn.Identity() will do nothing, it's just a place-holder
-        self.backbone.classifier = nn.Identity()
+            # Overwrite the classifier used for ImageNet pretraining
+            # nn.Identity() will do nothing, it's just a place-holder
+            self.backbone.classifier = nn.Identity()
+
         self.classifier = nn.Linear(self.feature_dim, num_classes)
 
     def forward(self, x):
@@ -38,6 +55,7 @@ class TorchVisionModel(nn.Module):
             return y, v
         else:
             raise KeyError(f"Unsupported loss: {self.loss}")
+
 
 
 
