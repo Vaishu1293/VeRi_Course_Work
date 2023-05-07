@@ -34,6 +34,13 @@ class TorchVisionModel(nn.Module):
 
     def forward(self, x):
         v = self.backbone(x)
+        if self.backbone.__class__.__name__ == 'AlexNet':
+            # Reshape the penultimate layer output using the AdaptiveAvgPool2d layer
+            v = self.pool(v)
+        else:
+            v = self.backbone(x)
+
+        v = v.view(v.size(0), -1)
 
         if not self.training:
             return v
