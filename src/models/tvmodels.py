@@ -37,16 +37,16 @@ class TorchVisionModel(nn.Module):
 
     def forward(self, x):
         v = self.backbone(x)
-        if self.backbone.__class__.__name__ == 'AlexNet':
-            # Reshape the penultimate layer output using the AdaptiveAvgPool2d layer
-            v = self.pool(v)
-        else:
-            v = self.backbone(x)
-
-        v = v.view(v.size(0), -1)
 
         if not self.training:
             return v
+
+        if len(v.shape) < 3:
+            # Add a dimension to the tensor to make it at least 3D
+            v = v.unsqueeze(2)
+
+        v = self.pool(v)
+        v = v.view(v.size(0), -1)
 
         y = self.classifier(v)
 
@@ -56,9 +56,6 @@ class TorchVisionModel(nn.Module):
             return y, v
         else:
             raise KeyError(f"Unsupported loss: {self.loss}")
-
-
-
 
 
 def vgg16(num_classes, loss={"xent"}, pretrained=True, **kwargs):
