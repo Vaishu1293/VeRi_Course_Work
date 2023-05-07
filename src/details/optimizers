@@ -1,0 +1,15 @@
+This code defines a function `init_optimizer` that initializes and returns an optimizer object for a PyTorch model. The function takes in several arguments including the model to be optimized, the optimizer choice, the learning rate, weight decay, and other optimizer-specific parameters.
+
+The function begins by checking whether to use staged learning rates or not, which is controlled by the `staged_lr` argument. If staged learning rates are used, the function separates the model's trainable parameters into two groups: `base_params` and `new_params`. The `new_params` group contains the parameters of the new layers added to the model, while `base_params` contains the parameters of the pre-trained layers. The learning rate for the `base_params` group is scaled by the `base_lr_mult` argument, while the learning rate for the `new_params` group is set to the input learning rate. 
+
+The function then constructs the optimizer based on the optimizer choice (`optim`) argument. The optimizer is created by passing the model's trainable parameters to the optimizer constructor, along with the learning rate, weight decay, and optimizer-specific parameters. 
+
+The supported optimizers are:
+
+- `adam`: Adam optimizer with the input learning rate, weight decay, and Adam-specific parameters (`adam_beta1` and `adam_beta2`).
+- `amsgrad`: AMSGrad optimizer with the input learning rate, weight decay, and AMSGrad-specific parameters (`adam_beta1` and `adam_beta2`).
+- `sgd`: SGD optimizer with the input learning rate, momentum, weight decay, and SGD-specific parameters (`dampening` and `nesterov`).
+- `rmsprop`: RMSprop optimizer with the input learning rate, momentum, weight decay, and RMSprop-specific parameter (`rmsprop_alpha`).
+
+If an unsupported optimizer is provided, the function raises a `ValueError`.
+

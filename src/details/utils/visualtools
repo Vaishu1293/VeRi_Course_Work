@@ -1,0 +1,5 @@
+This script defines a function `visualize_ranked_results` that visualizes the ranked results of a retrieval task. The input to the function is a distance matrix of shape `(num_query, num_gallery)` which contains pairwise distances between query images and gallery images. The function also takes a tuple `dataset` that contains the query and gallery data, where each element of the tuple is a list of `(img_path, pid, camid)` tuples representing the image path, person ID, and camera ID.
+
+The function saves the output images to the specified `save_dir` directory, and saves the top `topk` ranked images for each query image. For each query image, a new directory is created in `save_dir` with the same name as the query image file, and the corresponding image is saved in this directory with the prefix "query_top000". The top `topk` images from the gallery are then saved in the same directory with the prefix "gallery_topXXX", where XXX is the rank of the image in the sorted list.
+
+The function makes use of the `iotools` module to create directories and copy images to the appropriate location in the output directory. It uses the `shutil` module to copy the image files.

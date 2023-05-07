@@ -1,0 +1,6 @@
+This module defines several utility functions for input/output (IO) operations. Below is the explanation of each function:
+
+- `mkdir_if_missing(directory)`: creates a new directory at the given path if it does not exist.
+- `check_isfile(path)`: checks if a file exists at the given path, and returns a boolean value indicating whether the file exists or not. If the file does not exist, it also prints a warning message.
+- `read_json(fpath)`: reads a JSON file and returns the corresponding Python object (dictionary, list, etc.).
+- `write_json(obj, fpath)`: writes a Python object (dictionary, list, etc.) to a JSON file. If the directory of the output file does not exist, it creates the directory first.

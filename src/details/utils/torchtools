@@ -1,0 +1,11 @@
+This module contains a collection of functions that are useful for deep learning tasks. Here is a brief summary of what each function does:
+
+- `save_checkpoint(state, save_dir, is_best=False, remove_module_from_keys=False)`: This function saves the current state of a model to a checkpoint file, with an option to mark it as the best model. The state can be restored using `resume_from_checkpoint()`. If `remove_module_from_keys` is set to `True`, the `state_dict` keys with the prefix "module." will be modified to remove the prefix.
+- `resume_from_checkpoint(ckpt_path, model, optimizer=None)`: This function loads a checkpoint file and restores the state of a model. If an optimizer is provided, its state is also restored.
+- `adjust_learning_rate(optimizer, base_lr, epoch, stepsize=20, gamma=0.1, linear_decay=False, final_lr=0, max_epoch=100)`: This function adjusts the learning rate of an optimizer based on the epoch number, with options for different types of decay.
+- `set_bn_to_eval(m)`: This function sets all BatchNorm layers to evaluation mode, freezing their running mean and variance.
+- `open_all_layers(model)`: This function sets all parameters of a model to be trainable.
+- `open_specified_layers(model, open_layers)`: This function sets specified layers of a model to be trainable, while freezing the rest.
+- `count_num_param(model)`: This function counts the number of trainable parameters in a model.
+- `accuracy(output, target, topk=(1,))`: This function computes the top-k accuracy of a model's output.
+- `load_pretrained_weights(model, weight_path)`: This function loads weights from a pre-trained model to the current model, ignoring any layers that do not match in name or size.

@@ -1,0 +1,21 @@
+The code defines two classes and a function related to building a sampler for training a deep learning model. Here is a detailed explanation of each line of the code:
+
+1. The `copy` module is imported to copy objects for use in creating the data sampler.
+2. The `random` module is imported to generate random numbers to shuffle and select data.
+3. The `defaultdict` class is imported from the `collections` module to create a dictionary that automatically generates a default value for any key that does not exist.
+4. The `numpy` module is imported and renamed as `np`.
+5. The `Sampler` class is imported from the `torch.utils.data.sampler` module. This class is a base class for samplers that sample elements from a dataset.
+6. The `RandomIdentitySampler` class is defined, which is a subclass of the `Sampler` class. This sampler randomly samples N identities, and for each identity, it randomly samples K instances. Thus, the batch size is N*K.
+7. The `__init__` method of the `RandomIdentitySampler` class is defined. It takes `data_source`, `batch_size`, and `num_instances` as input parameters. `data_source` is a list of tuples, where each tuple contains the path of an image, its associated person ID (pid), and the camera ID (camid) that captured the image. `batch_size` is the number of examples in a batch. `num_instances` is the number of instances per identity in a batch.
+8. The `self.data_source` instance variable is set to the `data_source` input parameter.
+9. The `self.batch_size` instance variable is set to the `batch_size` input parameter.
+10. The `self.num_instances` instance variable is set to the `num_instances` input parameter.
+11. The `self.num_pids_per_batch` instance variable is set to the integer division of `self.batch_size` by `self.num_instances`.
+12. The `self.index_dic` instance variable is a dictionary that maps each pid to a list of indices of images with that pid in `self.data_source`. The dictionary is created by iterating over `self.data_source` and adding each index to the list corresponding to its pid in the dictionary.
+13. The `self.pids` instance variable is set to the list of keys in `self.index_dic`.
+14. The `self.length` instance variable is set to the estimated number of examples in an epoch. The length is computed by iterating over each pid in `self.pids` and adding the number of instances of that pid in the epoch. The length is rounded up to the nearest multiple of `self.num_instances`.
+15. The `__iter__` method of the `RandomIdentitySampler` class is defined. It returns an iterator over the indices of the images in the data source. The method randomly selects `self.num_instances` indices for each pid in `self.pids`, shuffles them, and groups them into batches of size `self.num_instances`. It then randomly selects `self.num_pids_per_batch` pids and returns the indices of their batches as a list.
+16. The `avai_pids` instance variable is set to a copy of `self.pids`.
+17. The `final_idxs` instance variable is set to an empty list.
+18. A while loop is started, which runs until the number of available pids is less than `self.num_pids_per_batch`. The loop randomly selects `self.num_pids_per_batch` pids from `avai_pids`, adds the indices of their batches to `final_idxs`, and removes the selected pids from `avai_pids`.
+19. The `__len__

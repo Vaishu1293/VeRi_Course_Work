@@ -1,0 +1,15 @@
+This code defines a function called `init_lr_scheduler` which initializes a learning rate scheduler for the optimizer provided as an argument. It supports two types of learning rate schedulers, which are specified by the `lr_scheduler` parameter:
+
+- `single_step`: uses a StepLR scheduler, which multiplies the learning rate by `gamma` every `stepsize` epochs. `stepsize` is specified as a list with one element.
+- `multi_step`: uses a MultiStepLR scheduler, which multiplies the learning rate by `gamma` at each milestone epoch specified in the `stepsize` list.
+
+The `optimizer` argument should be a PyTorch optimizer object. The function returns a PyTorch learning rate scheduler object, which can be used to adjust the learning rate of the optimizer during training. If the `lr_scheduler` parameter is set to an unsupported value, a `ValueError` is raised.
+
+The `init_lr_scheduler()` function initializes a learning rate scheduler for an optimizer. It takes in the following arguments:
+
+- `optimizer`: The optimizer for which the learning rate scheduler is to be initialized.
+- `lr_scheduler`: The type of learning rate scheduler to be used. The default value is "multi_step", which uses the `MultiStepLR` learning rate scheduler from PyTorch.
+- `stepsize`: A list of integers that specifies the number of epochs after which the learning rate will be decreased. For example, if `stepsize` is set to `[20, 40]`, the learning rate will be decreased after 20 and 40 epochs.
+- `gamma`: The factor by which the learning rate will be decreased. For example, if `gamma` is set to 0.1, the learning rate will be decreased by a factor of 0.1.
+
+If the `lr_scheduler` argument is set to "single_step", the function initializes a `StepLR` learning rate scheduler with the step size and gamma specified in the arguments. If the `lr_scheduler` argument is set to "multi_step", the function initializes a `MultiStepLR` learning rate scheduler with the milestones and gamma specified in the arguments. If the `lr_scheduler` argument is set to any other value, the function raises a `ValueError`.

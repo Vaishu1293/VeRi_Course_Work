@@ -1,0 +1,9 @@
+This code defines evaluation metrics used for vehicle re-identification (reID) tasks, specifically `eval_vehicleid` and `eval_veri`. These evaluation metrics compute the cumulative match curve (CMC) and mean average precision (mAP) scores, which are used to evaluate the performance of vehicle reID models.
+
+`eval_vehicleid` computes the CMC and mAP scores for the VehicleID dataset, where the gallery contains one image for each test vehicle, and the other images in the test set are used as queries. The function takes as input the distance matrix `distmat` between query and gallery feature vectors, as well as the corresponding person IDs (`q_pids`, `g_pids`) and camera IDs (`q_camids`, `g_camids`). `max_rank` specifies the maximum rank at which to compute the CMC score. The output of this function is the CMC and mAP scores.
+
+`eval_veri` computes the CMC and mAP scores for the VeRi dataset, where for each query identity, its gallery images from the same camera view are discarded. The input arguments and output are the same as `eval_vehicleid`.
+
+`evaluate` is a wrapper function that calls `eval_veri` by default, with `max_rank` set to 50. It is used to simplify the evaluation process by providing a single function call that can be used for both VeRi and VehicleID datasets.
+
+The evaluation metrics implemented in this code are commonly used in vehicle reID research to evaluate the performance of models. By comparing the CMC and mAP scores of different models, researchers can determine which models are more effective at matching vehicle images across different camera views and under varying lighting and environmental conditions.

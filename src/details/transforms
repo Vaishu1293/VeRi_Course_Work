@@ -1,0 +1,9 @@
+This code defines various data augmentation techniques to be used for training and testing deep learning models. 
+
+`Random2DTranslation` is a class that randomly crops an image after first resizing it. The `height` and `width` of the cropped image can be specified while initializing the class. `p` is the probability with which this transformation is applied to the image. 
+
+`RandomErasing` is a class that performs random erasing, a data augmentation technique in which a random rectangular patch of an image is replaced with random pixel values. The probability of this operation being performed can be specified while initializing the class. `sl` and `sh` are the minimum and maximum area of the erased rectangle respectively, `r1` is the minimum aspect ratio of the erased rectangle, and `mean` is a list of RGB values to fill the erased region. 
+
+`ColorAugmentation` is a class that randomly alters the intensities of RGB channels. 
+
+`build_transforms` is a function that builds the necessary data augmentation transformations for training and testing. `height` and `width` specify the size of the image to be transformed. `normalize` applies the ImageNet mean and standard deviation normalization to the image. `transform_train` is a list of transformation objects to be applied during training. These include `Random2DTranslation`, `T.RandomHorizontalFlip`, `T.ColorJitter` (if `color_jitter` is set to True), `T.ToTensor`, `ColorAugmentation` (if `color_aug` is set to True), and `RandomErasing` (if `random_erase` is set to True). `transform_test` is a list of transformations to be applied during testing, including `T.Resize`, `T.ToTensor`, and `normalize`.
