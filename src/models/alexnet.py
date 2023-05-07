@@ -10,7 +10,7 @@ model_urls = {
 }
 
 class AlexNet(nn.Module):
-    def __init__(self, num_classes, fc_dims=None, dropout_p=None):
+    def __init__(self, num_classes, fc_dims=None, dropout_p=None, **kwargs):
         super(AlexNet, self).__init__()
 
         self.features = nn.Sequential(
