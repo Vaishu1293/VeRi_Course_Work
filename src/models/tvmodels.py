@@ -1,8 +1,10 @@
+# Copyright (c) EEEM071, University of Surrey
+
 import torch.nn as nn
 import torchvision.models as tvmodels
 
 
-__all__ = ["mobilenet_v3_small", "vgg16", "squeezenet"]
+__all__ = ["mobilenet_v3_small", "vgg16"]
 
 
 class TorchVisionModel(nn.Module):
@@ -11,26 +13,12 @@ class TorchVisionModel(nn.Module):
 
         self.loss = loss
         self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
+        self.feature_dim = self.backbone.classifier[0].in_features
 
-        if name == "vgg16":
-            self.feature_dim = self.backbone.classifier[0].in_features
-        elif name == "squeezenet1_0":
-            self.feature_dim = 512
-            self.backbone.num_classes = num_classes
-            self.classifier = nn.Sequential(
-                nn.Dropout(p=0.5),
-                nn.Conv2d(512, num_classes, kernel_size=1),
-                nn.ReLU(inplace=True),
-                nn.AvgPool2d(kernel_size=13, stride=1)
-            )
-        else:
-            self.feature_dim = self.backbone.classifier[-1].in_features
-
-        # overwrite the classifier used for ImageNet pretraining
-        # nn.Identity() will do nothing, it's just a placeholder
+        # overwrite the classifier used for ImageNet pretrianing
+        # nn.Identity() will do nothing, it's just a place-holder
         self.backbone.classifier = nn.Identity()
-        if name != "squeezenet1_0":
-            self.classifier = nn.Linear(self.feature_dim, num_classes)
+        self.classifier = nn.Linear(self.feature_dim, num_classes)
 
     def forward(self, x):
         v = self.backbone(x)
@@ -38,15 +26,7 @@ class TorchVisionModel(nn.Module):
         if not self.training:
             return v
 
-        if len(v.shape) < 3:
-            # Add a dimension to the tensor to make it at least 3D
-            v = v.unsqueeze(2)
-
-        if isinstance(self.classifier, nn.Linear):
-            v = v.mean(dim=2)  # Global average pooling
-            y = self.classifier(v)
-        else:
-            y = self.classifier(v)
+        y = self.classifier(v)
 
         if self.loss == {"xent"}:
             return y
@@ -54,8 +34,6 @@ class TorchVisionModel(nn.Module):
             return y, v
         else:
             raise KeyError(f"Unsupported loss: {self.loss}")
-
-
 
 
 def vgg16(num_classes, loss={"xent"}, pretrained=True, **kwargs):
@@ -80,16 +58,5 @@ def mobilenet_v3_small(num_classes, loss={"xent"}, pretrained=True, **kwargs):
     return model
 
 
-def squeezenet(num_classes, loss={"xent"}, pretrained=True, **kwargs):
-    model = TorchVisionModel(
-        "squeezenet1_0",
-        num_classes=num_classes,
-        loss=loss,
-        pretrained=pretrained,
-        **kwargs,
-    )
-    return model
-
-
-# Define any models supported by torchvision below
+# Define any models supported by torchvision bellow
 # https://pytorch.org/vision/0.11/models.html

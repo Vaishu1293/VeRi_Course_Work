@@ -1,5 +1,5 @@
 # Copyright (c) EEEM071, University of Surrey
-
+from .alexnet import alexnet
 from .resnet import (
     resnet18,
     resnet18_fc512,
@@ -8,7 +8,7 @@ from .resnet import (
     resnet50,
     resnet50_fc512,
 )
-from .tvmodels import mobilenet_v3_small, vgg16, squeezenet
+from .tvmodels import mobilenet_v3_small, vgg16
 
 
 __model_factory = {
@@ -21,7 +21,7 @@ __model_factory = {
     "resnet50_fc512": resnet50_fc512,
     "mobilenet_v3_small": mobilenet_v3_small,
     "vgg16": vgg16,
-    "squeezenet": squeezenet
+    "alexnet": alexnet
 }
 
 
