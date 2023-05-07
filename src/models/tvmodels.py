@@ -33,6 +33,14 @@ class TorchVisionModel(nn.Module):
             self.backbone.fc = nn.Linear(in_features, num_classes)
             self.feature_dim = in_features
 
+        if name.startswith("densenet"):
+            # Modify the last layer to have the desired number of output features
+            in_features = self.backbone.classifier.in_features
+            self.backbone.classifier = nn.Linear(in_features, num_classes)
+            self.feature_dim = in_features
+        else:
+            self.feature_dim = self.backbone.classifier.in_features
+
         # overwrite the classifier used for ImageNet pretrianing
         # nn.Identity() will do nothing, it's just a place-holder
         self.backbone.classifier = nn.Identity()
