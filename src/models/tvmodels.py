@@ -18,7 +18,7 @@ class TorchVisionModel(nn.Module):
 
         if name == "alexnet":
             # Load the pretrained AlexNet model
-            alexnet = models.alexnet(pretrained=pretrained)
+            alexnet = tvmodels.__dict__[name](pretrained=pretrained)
 
             # Access the last layer (classifier) of the model using nn.Sequential
             classifier = nn.Sequential(*list(alexnet.classifier.children()))
