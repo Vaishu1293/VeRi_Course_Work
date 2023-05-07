@@ -13,7 +13,13 @@ class TorchVisionModel(nn.Module):
 
         self.loss = loss
         self.backbone = tvmodels.__dict__[name](pretrained=pretrained)
-        self.feature_dim = self.backbone.classifier[0].in_features
+        self.feature_dim = None
+
+        # Find the last linear layer
+        for m in reversed(self.backbone.classifier):
+            if isinstance(m, nn.Linear):
+                self.feature_dim = m.in_features
+                break
 
         # overwrite the classifier used for ImageNet pretrianing
         # nn.Identity() will do nothing, it's just a place-holder
