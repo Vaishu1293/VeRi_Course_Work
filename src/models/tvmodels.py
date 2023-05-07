@@ -28,7 +28,10 @@ class TorchVisionModel(nn.Module):
             # Modify the classifier to have the desired input dimensions
             self.classifier = nn.Linear(in_features * 6 * 6, num_classes)
         else:
-            self.feature_dim = self.backbone.classifier[0].in_features
+            # Modify the last layer to have the desired number of output features
+            in_features = self.backbone.fc.in_features
+            self.backbone.fc = nn.Linear(in_features, num_classes)
+            self.feature_dim = in_features
 
         # overwrite the classifier used for ImageNet pretrianing
         # nn.Identity() will do nothing, it's just a place-holder
@@ -56,6 +59,7 @@ class TorchVisionModel(nn.Module):
             return y, v
         else:
             raise KeyError(f"Unsupported loss: {self.loss}")
+
 
 
 def vgg16(num_classes, loss={"xent"}, pretrained=True, **kwargs):
