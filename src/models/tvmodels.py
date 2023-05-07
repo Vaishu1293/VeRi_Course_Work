@@ -4,7 +4,7 @@ import torch.nn as nn
 import torchvision.models as tvmodels
 
 
-__all__ = ["mobilenet_v3_small", "vgg16", "alexnet"]
+__all__ = ["mobilenet_v3_small", "vgg16", "alexnet", "densenet121", "densenet169", "densenet201"]
 
 
 class TorchVisionModel(nn.Module):
@@ -66,6 +66,38 @@ def mobilenet_v3_small(num_classes, loss={"xent"}, pretrained=True, **kwargs):
 def alexnet(num_classes, loss={"xent"}, pretrained=True, **kwargs):
     model = TorchVisionModel(
         "alexnet",
+        num_classes=num_classes,
+        loss=loss,
+        pretrained=pretrained,
+        **kwargs,
+    )
+    return model
+
+def densenet121(num_classes, loss={"xent"}, pretrained=True, **kwargs):
+    model = TorchVisionModel(
+        "densenet121",
+        num_classes=num_classes,
+        loss=loss,
+        pretrained=pretrained,
+        **kwargs,
+    )
+    return model
+
+
+def densenet169(num_classes, loss={"xent"}, pretrained=True, **kwargs):
+    model = TorchVisionModel(
+        "densenet169",
+        num_classes=num_classes,
+        loss=loss,
+        pretrained=pretrained,
+        **kwargs,
+    )
+    return model
+
+
+def densenet201(num_classes, loss={"xent"}, pretrained=True, **kwargs):
+    model = TorchVisionModel(
+        "densenet201",
         num_classes=num_classes,
         loss=loss,
         pretrained=pretrained,
