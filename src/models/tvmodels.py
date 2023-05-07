@@ -20,10 +20,13 @@ class TorchVisionModel(nn.Module):
             # Modify the last layer to have the desired number of output features
             in_features = self.backbone.classifier[-1].in_features
             self.backbone.classifier[-1] = nn.Linear(in_features, num_classes)
-            self.feature_dim = num_classes
+            self.feature_dim = in_features
 
             # Add an AdaptiveAvgPool2d layer to reshape the penultimate layer output
             self.pool = nn.AdaptiveAvgPool2d((6, 6))
+
+            # Modify the classifier to have the desired input dimensions
+            self.classifier = nn.Linear(in_features * 6 * 6, num_classes)
         else:
             self.feature_dim = self.backbone.classifier[0].in_features
 
