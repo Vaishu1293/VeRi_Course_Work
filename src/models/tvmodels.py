@@ -27,11 +27,6 @@ class TorchVisionModel(nn.Module):
 
             # Modify the classifier to have the desired input dimensions
             self.classifier = nn.Linear(in_features * 6 * 6, num_classes)
-        else:
-            # Modify the last layer to have the desired number of output features
-            in_features = self.backbone.fc.in_features
-            self.backbone.fc = nn.Linear(in_features, num_classes)
-            self.feature_dim = in_features
 
         if name.startswith('densenet'):
             in_features = self.backbone.classifier.in_features
