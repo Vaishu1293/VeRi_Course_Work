@@ -9,7 +9,7 @@ from .resnet import (
     resnet50_fc512,
 )
 from .tvmodels import mobilenet_v3_small, vgg16
-from .custom_veri_model import  import custom_veri_model
+from .custom_veri_model import custom_veri_model
 
 __model_factory = {
     # image classification models
