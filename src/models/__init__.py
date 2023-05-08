@@ -9,7 +9,7 @@ from .resnet import (
     resnet50_fc512,
 )
 from .tvmodels import mobilenet_v3_small, vgg16
-
+from .custom_veri_model import  import custom_veri_model
 
 __model_factory = {
     # image classification models
@@ -21,7 +21,8 @@ __model_factory = {
     "resnet50_fc512": resnet50_fc512,
     "mobilenet_v3_small": mobilenet_v3_small,
     "vgg16": vgg16,
-    "alexnet": alexnet
+    "alexnet": alexnet,
+    "custom_veri_model": custom_veri_model
 }
 
 
