@@ -40,17 +40,22 @@ class AlexNet(nn.Module):
                 if dropout_p is not None:
                     classifier_layers.append(nn.Dropout(p=dropout_p))
                 input_dim = dim
-            classifier_layers.append(nn.Linear(fc_dims[-1], num_classes))
-            self.classifier = nn.Sequential(*classifier_layers)
+            self.fc = nn.Sequential(*classifier_layers)
+            self.classifier = nn.Linear(fc_dims[-1], num_classes)
         else:
+            self.fc = None
             self.classifier = nn.Linear(256 * 6 * 6, num_classes)
 
     def forward(self, x):
         x = self.features(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        x = self.classifier(x)
-        return x
+        if self.fc is not None:
+            features = self.fc(x)
+        else:
+            features = x
+        outputs = self.classifier(features)
+        return outputs, features
 
 def init_pretrained_weights(model, model_url):
     """
