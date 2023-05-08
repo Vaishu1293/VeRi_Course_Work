@@ -54,6 +54,8 @@ class AlexNet(nn.Module):
             features = self.fc(x)
         else:
             features = x
+        if not self.training:
+            return x
         outputs = self.classifier(features)
         return outputs, features
 
