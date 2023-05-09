@@ -37,14 +37,12 @@ class CustomVeRiModel(nn.Module):
         x = self.features(x)
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
-        if self.fc is not None:
-            features = self.fc(x)
-        else:
-            features = x
         if not self.training:
-            return x, features
-        outputs = self.classifier(features)
-        return outputs, features
+            return x, x
+        features = self.classifier(x)
+        outputs = features
+        return outputs, x
+
 
 
 def custom_veri_model(num_classes, **kwargs):
