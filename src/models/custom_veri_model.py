@@ -38,7 +38,7 @@ class CustomVeRiModel(nn.Module):
         x = self.avgpool(x)
         x = x.view(x.size(0), -1)
         if not self.training:
-            return x, x
+            return x
         features = self.classifier(x)
         outputs = features
         return outputs, x
